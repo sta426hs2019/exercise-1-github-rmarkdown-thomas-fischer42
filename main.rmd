@@ -1,0 +1,59 @@
+---
+title: "STA426 Week 1"
+author: "thomasfischer42"
+date: "18 9 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(gridExtra)
+```
+
+
+# Week 1 part b)
+
+1. Acquaint yourself with knitR PDF/HTML Rmarkdown documents.
+
+2. Create an HTML document that samples 100 values from a log-normal distribution (say, mu=1, sigma=.25); create a histogram of the distribution and the distribution on the log scale; report the mean and variance of the sample in line in the text. (In general, do not just dump the R code and plots in the HTML document; break your exercises into sections with headings, add some text and make it readable.
+
+## Draw samples from log-normal distribution
+```{r}
+n <- 100
+mu <- 1
+sd <- 0.5
+
+set.seed(2019)
+x <- rlnorm(n, mu, sd)
+y <- rnorm(n, mu, sd)
+```
+
+
+## Set up visualisations
+```{r}
+# Histogram
+p_hist <- ggplot() +
+  geom_histogram( aes( x = x)) + 
+  theme_minimal()
+
+# Density on log scale
+p_dens <- ggplot() + 
+  geom_density( aes(x = log(x))) + 
+  geom_density( aes(x = y), lty = 2, col = "red") + 
+  theme_minimal()
+```
+
+
+## Plot visualisations
+```{r}
+gridExtra::grid.arrange(p_hist, p_dens)
+```
+
+The histogram is strongly right-skewed.  
+
+The red line represents the density of a sample drawn from $N(0,1)$, whereas the black line corresponds to the log transformed log-normal sample. They're relatively similar in terms of location and shape. 
+
+## Using inline chunks
+
+The sample mean is `r round(mean(x), 3)`, and the sample variance is `r round(var(x), 3)`. 
